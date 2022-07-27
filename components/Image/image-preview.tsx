@@ -67,6 +67,7 @@ function Preview(props: ImagePreviewProps, ref) {
     escToExit = true,
   } = props;
 
+  // previewGroup这个变量来判断是单个图片预览还是图片组预览
   const { previewGroup, previewUrlMap, currentIndex, setCurrentIndex, infinite } =
     useContext(PreviewGroupContext);
   const mergedSrc = previewGroup ? previewUrlMap.get(currentIndex) : src;
@@ -110,14 +111,18 @@ function Preview(props: ImagePreviewProps, ref) {
   const [rotate, setRotate] = useState(0);
   const [moving, setMoving] = useState(false);
 
+  // 管理缩放的
   const previewScales = useMemo(() => {
     return new PreviewScales(scales);
   }, []);
 
   // Reset image params
   function reset() {
+    // 偏移量归0
     setTranslate({ x: 0, y: 0 });
+    // 缩放归 1
     setScale(1);
+    // 旋转角度归 0
     setRotate(0);
   }
 
@@ -128,6 +133,7 @@ function Preview(props: ImagePreviewProps, ref) {
   const [container, setContainer] = useState<HTMLElement>();
   const getContainer = useCallback(() => container, [container]);
   useEffect(() => {
+    // 如果有的话，获取要挂载的父容器
     const container = getPopupContainer && getPopupContainer();
     const containerDom = (findDOMNode(container) || document.body) as HTMLElement;
     setContainer(containerDom);
@@ -168,6 +174,7 @@ function Preview(props: ImagePreviewProps, ref) {
   }
 
   // Scale
+  // 这个定时器是有个缩放大小提示，定时1秒后隐藏这个提示
   const hideScaleTimer = useRef(null);
   const showScaleValue = () => {
     !scaleValueVisible && setScaleValueVisible(true);
@@ -176,6 +183,7 @@ function Preview(props: ImagePreviewProps, ref) {
       setScaleValueVisible(false);
     }, 1000);
   };
+  // 缩放改变触发这个函数
   const onScaleChange = (newScale) => {
     if (scale !== newScale) {
       setScale(newScale);
@@ -183,20 +191,23 @@ function Preview(props: ImagePreviewProps, ref) {
     }
   };
 
+  // 放大函数
   function onZoomIn() {
     const newScale = previewScales.getNextScale(scale, 'zoomIn');
     onScaleChange(newScale);
   }
 
+  // 缩小函数
   function onZoomOut() {
     const newScale = previewScales.getNextScale(scale, 'zoomOut');
     onScaleChange(newScale);
   }
 
+  // 回到1:1比例
   function onResetScale() {
     onScaleChange(1);
   }
-
+  // 全屏函数
   function onFullScreen() {
     const wrapperRect = refWrapper.current.getBoundingClientRect();
     const imgRect = refImage.current.getBoundingClientRect();
@@ -206,6 +217,7 @@ function Preview(props: ImagePreviewProps, ref) {
     onScaleChange(newScale);
   }
 
+  // 如果是给定了一个父容器，这是点击父容器遮罩层的事件
   // Image container is clicked
   function onOutsideImgClick(e) {
     if (e.target === e.currentTarget && maskClosable) {
@@ -264,12 +276,23 @@ function Preview(props: ImagePreviewProps, ref) {
   const onMoveEnd = (e) => {
     e.preventDefault && e.preventDefault();
     setMoving(false);
+    console.log(
+      '%c 🍰 鼠标拖动结束: ',
+      'font-size:20px;background-color: #6EC1C2;color:#fff;',
+      '鼠标拖动结束'
+    );
   };
 
   // Record position data on move start
+  // 当鼠标开始拖动图片时候，把moving变量置成true
   const onMoveStart = (e) => {
     e.preventDefault && e.preventDefault();
     setMoving(true);
+    console.log(
+      '%c 🍝 鼠标开始拖动图片: ',
+      'font-size:20px;background-color: #B03734;color:#fff;',
+      '鼠标开始拖动图片'
+    );
 
     const ev = e.type === 'touchstart' ? e.touches[0] : e;
     refMoveData.current.pageX = ev.pageX;
@@ -280,10 +303,12 @@ function Preview(props: ImagePreviewProps, ref) {
 
   useEffect(() => {
     if (visible && moving) {
+      // 添加eventLinster
       on(document, 'mousemove', onMoving, false);
       on(document, 'mouseup', onMoveEnd, false);
     }
     return () => {
+      // 组件销毁时候解除绑定eventListener，不然容易内存泄露
       off(document, 'mousemove', onMoving, false);
       off(document, 'mouseup', onMoveEnd, false);
     };
@@ -301,6 +326,7 @@ function Preview(props: ImagePreviewProps, ref) {
     checkAndFixTranslate();
   }, [scale]);
 
+  // 如果关闭预览或者换成其他图片，会调用reset，把当前预览的缩放，旋转角度，位移全部回到初始状态
   // Reset when preview is opened
   useEffect(() => {
     if (visible) {
@@ -322,6 +348,7 @@ function Preview(props: ImagePreviewProps, ref) {
 
   // Close when pressing esc
   useEffect(() => {
+    // 点击esc的事件
     const onKeyDown = (e) => {
       if (escToExit && e && e.key === Esc.key) {
         close();
@@ -392,6 +419,7 @@ function Preview(props: ImagePreviewProps, ref) {
             ...(isFixed ? {} : { zIndex: 'inherit', position: 'absolute' }),
           }}
         >
+          {/* 这个是预览图片时候的黑色遮罩 */}
           <CSSTransition
             in={visible}
             timeout={400}
@@ -447,6 +475,7 @@ function Preview(props: ImagePreviewProps, ref) {
                     </div>
                   )}
                 </div>
+                {/* 图片大小缩放时候的提示 */}
                 <CSSTransition
                   in={scaleValueVisible}
                   timeout={400}
@@ -473,6 +502,7 @@ function Preview(props: ImagePreviewProps, ref) {
                     <IconClose />
                   </div>
                 )}
+                {/* 如果是预览组的话，才会渲染左右两个点击按钮 */}
                 {previewGroup && (
                   <ImagePreviewArrow
                     previewCount={previewUrlMap.size}

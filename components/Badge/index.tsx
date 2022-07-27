@@ -58,6 +58,7 @@ function Badge(baseProps: BadgeProps, ref) {
   }
 
   const getDom = () => {
+    // 如果count传入不是一个数字，就渲染count传入的内容
     if (isObject(count)) {
       return (
         <span className={cs(`${prefixCls}-custom-dot`, dotClassName)} style={dotStyle}>
@@ -65,9 +66,11 @@ function Badge(baseProps: BadgeProps, ref) {
         </span>
       );
     }
-    const colorStyle = !color || InnerColors.indexOf(color) > -1 ? {} : { backgroundColor: color };
+    // 如果color没传或者color不在Innercolors里面就设置为{}
+    const colorStyle = !color || !InnerColors.includes(color) ? {} : { backgroundColor: color };
 
     // display a red dot if color and status are NOT set
+    // 渲染点形式，如果给text就渲染text
     if (text && !color && !status) {
       return (
         <span className={cs(`${prefixCls}-text`, dotClassName)} style={dotStyle}>
@@ -75,6 +78,7 @@ function Badge(baseProps: BadgeProps, ref) {
         </span>
       );
     }
+    // 点形式自定义颜色以及文字
     if (status || (color && count <= 0)) {
       return (
         <span className={`${prefixCls}-status-wrapper`}>
@@ -93,6 +97,7 @@ function Badge(baseProps: BadgeProps, ref) {
         </span>
       );
     }
+
     if ((dot || color) && count > 0) {
       return (
         <CSSTransition
@@ -116,6 +121,8 @@ function Badge(baseProps: BadgeProps, ref) {
         </CSSTransition>
       );
     }
+
+    // 最后是参数没有时候作为普通Badge使用
     return (
       <Count
         prefixCls={prefixCls}

@@ -5,6 +5,7 @@ import { ConfigContext } from '../ConfigProvider';
 import { EmptyProps } from './interface';
 import useMergeProps from '../_util/hooks/useMergeProps';
 
+// 也是纯展示类的组件，也很简单
 function Empty(baseProps: EmptyProps, ref) {
   const { getPrefixCls, locale: globalLocale, componentConfig } = useContext(ConfigContext);
   const props = useMergeProps<EmptyProps>(baseProps, {}, componentConfig?.Empty);

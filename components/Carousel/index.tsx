@@ -247,6 +247,7 @@ function Carousel(baseProps: CarouselProps, ref) {
             [`${prefixCls}-negative`]: slideDirection === 'negative',
           })}
         >
+          {/* 拿到自组件列表，然后map渲染，真的太贴近js啦 */}
           {childrenList.map((child, index) => {
             const isCurrent = index === mergedIndex;
             const isPrev = index === prevIndex;
@@ -295,6 +296,7 @@ function Carousel(baseProps: CarouselProps, ref) {
           })}
         </div>
 
+        {/* 当指示器不为never并且子组件列表长度至少为2时候渲染指示器 */}
         {indicatorType !== 'never' && childrenLength > 1 && (
           <div
             style={computedStyle.indicatorWrapper}

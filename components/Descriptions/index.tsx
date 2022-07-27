@@ -16,6 +16,7 @@ const defaultProps: DescriptionsProps = {
   tableLayout: 'auto',
 };
 
+// 也是纯展示类组件，较为简单
 function Descriptions(baseProps: DescriptionsProps) {
   const { getPrefixCls, componentConfig, rtl } = useContext(ConfigContext);
   const props = useMergeProps<DescriptionsProps>(

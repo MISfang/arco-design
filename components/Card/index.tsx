@@ -33,6 +33,7 @@ function Card(baseProps: CardProps, ref) {
 
   const prefixCls = getPrefixCls('card');
 
+  // 处理一下，如果有actionlist就先生成列表
   const actionList =
     actions && actions.length ? (
       <div className={`${prefixCls}-actions`}>
@@ -46,9 +47,11 @@ function Card(baseProps: CardProps, ref) {
       </div>
     ) : null;
 
+  // 设置两个flag，默认是false
   let isContainGrid = false;
   let isContainMeta = false;
 
+  // 判断处理一下children，如果是Card.grid的类型，就设置isContainGrid为true，另一个同理
   const handledChildren = React.Children.map(children, (element: JSX.Element) => {
     if (element && element.type) {
       if (element.type === Grid) {

@@ -12,6 +12,8 @@ import useMergeProps from '../_util/hooks/useMergeProps';
 
 const getActiveKeys = (keys: CollapseProps['activeKey'], accordion: boolean): string[] => {
   const res = [].concat(keys);
+  // 判断是否是手风琴模式，手风琴模式，同一时间只能有一个面板展开
+  // 这里是手风琴模式的话，取传入的激活keys的第一个做为激活项
   if (accordion) {
     return res.slice(0, 1);
   }
@@ -72,17 +74,23 @@ function Collapse(baseProps: PropsWithChildren<CollapseProps>, ref) {
 
   const onItemClick = (key: string, e): void => {
     let newActiveKeys = [...activeKeys];
+    // 维护了一个激活的keys数组
     const index = activeKeys.indexOf(key);
     if (index > -1) {
+      // index > -1表示该item本身已经激活，要取消激活
       newActiveKeys.splice(index, 1);
     } else if (accordion) {
+      // accordion为true表示是手风琴模式，同时只有一个能激活
       newActiveKeys = [key];
     } else {
+      // 上面两个都没走到意思是没有被激活，要被激活
       newActiveKeys.push(key);
     }
+    // 如果传入了activekey这里就不会设置了
     if (!('activeKey' in props)) {
       setActiveKeys(newActiveKeys);
     }
+    // 触发onChage回调
     isFunction(onChange) && onChange(key, newActiveKeys, e);
   };
 

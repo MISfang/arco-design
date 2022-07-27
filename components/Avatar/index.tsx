@@ -11,3 +11,5 @@ const AvatarComponent = Avatar as AvatarComponentType;
 AvatarComponent.Group = Group;
 
 export default AvatarComponent;
+
+// 较复杂的一个组件

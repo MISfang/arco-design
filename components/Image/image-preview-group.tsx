@@ -46,17 +46,20 @@ function PreviewGroup(props: PropsWithChildren<ImagePreviewGroupProps>, ref) {
   const isFirstRender = useIsFirstRender();
   const getPreviewUrlMap = () => (propPreviewUrlMap ? new Map(propPreviewUrlMap) : new Map());
   const [previewUrlMap, setPreviewUrlMap] = useState<PreviewUrlMap>(getPreviewUrlMap());
+
   useEffect(() => {
     if (isFirstRender) return;
     setPreviewUrlMap(getPreviewUrlMap());
   }, [propPreviewUrlMap]);
 
+  // 过滤出来每个图片是否能预览的数组
   const canPreviewUrlMap = new Map(
     Array.from(previewUrlMap)
       .filter(([, { preview }]) => preview)
       .map(([id, { url }]) => [id, url])
   );
 
+  // 当前在预览的图片ID
   const [currentIndex, setCurrentIndex] = useMergeValue(0, {
     value: propCurrentIndex,
     defaultValue: defaultCurrent,
@@ -64,6 +67,7 @@ function PreviewGroup(props: PropsWithChildren<ImagePreviewGroupProps>, ref) {
 
   function registerPreviewUrl(id: number, url: string, preview: boolean) {
     if (!propPreviewUrlMap) {
+      // setState的时候，如果传入一个函数，那么这个回调函数里面会给你上一次的state值
       setPreviewUrlMap((pre) =>
         new Map(pre).set(id, {
           url,
@@ -92,10 +96,12 @@ function PreviewGroup(props: PropsWithChildren<ImagePreviewGroupProps>, ref) {
 
   const handleVisibleChange = (visible, preVisible) => {
     setVisible(visible);
+    // 切换是否预览的会触发这个钩子，传入当前预览值以及上次预览的值
     onVisibleChange && onVisibleChange(visible, preVisible);
   };
 
   const handleSwitch = (index: number) => {
+    // 左右点击切换预览图片时候触发onChage回调
     onChange && onChange(index);
     setCurrentIndex(index);
   };
@@ -104,6 +110,8 @@ function PreviewGroup(props: PropsWithChildren<ImagePreviewGroupProps>, ref) {
     let index = 0;
 
     const loop = (children) => {
+      // 有点像Array.map 第一个参数绑定this，第二个参数开始才是要传入的参数
+      // 只有节点的displayName === 'Image'，也就是Image组件时，才会渲染，其他一律不渲染
       return React.Children.map(children, (child) => {
         if (child && child.props && child.type) {
           const displayName = child.type.displayName;
@@ -117,7 +125,6 @@ function PreviewGroup(props: PropsWithChildren<ImagePreviewGroupProps>, ref) {
             children: loop(child.props.children),
           });
         }
-
         return child;
       });
     };
@@ -129,17 +136,19 @@ function PreviewGroup(props: PropsWithChildren<ImagePreviewGroupProps>, ref) {
     <PreviewGroupContext.Provider
       value={{
         previewGroup: true,
-        previewUrlMap: canPreviewUrlMap,
-        infinite,
-        currentIndex,
-        setCurrentIndex: handleSwitch,
+        previewUrlMap: canPreviewUrlMap, // 要预览的数组
+        infinite, // 是否开启无限循环 boolean
+        currentIndex, // 当前在预览的是哪一张图片
+        setCurrentIndex: handleSwitch, // 切换在预览图片的handle
         setPreviewUrlMap,
         registerPreviewUrl,
         visible,
         setVisible,
       }}
     >
+      {/* 这里渲染Image数组 */}
       {loopImageIndex(children)}
+      {/* 下面才是ImagePreview的组件 */}
       <ImagePreview
         ref={refPreview}
         src=""

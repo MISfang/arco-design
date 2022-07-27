@@ -7,3 +7,5 @@ export default {
 };
 
 export { RowProps, ColProps } from './interface';
+
+// index 对组件内资源进行整合

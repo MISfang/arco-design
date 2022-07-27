@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { isUndefined } from '../is';
 
+// 第一个参数是默认的state值，第二个参数是props
 export default function useMergeValue<T>(
   defaultStateValue: T,
   props?: {

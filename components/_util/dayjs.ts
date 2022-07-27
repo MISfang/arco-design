@@ -47,6 +47,8 @@ originDayjs.extend(QuarterOfYear);
 export const dayjs = originDayjs;
 
 // 兼容 moment
+
+// 对日历组件封装一个完整的methos类来处理数据变化
 export const methods = {
   add(time, value: number, unit: UnitType) {
     return isMoment ? time.clone().add(value, unit) : time.add(value, unit);

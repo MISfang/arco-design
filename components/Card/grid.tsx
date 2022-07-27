@@ -7,6 +7,7 @@ function Grid(props: CardGridProps, ref) {
   const { children, style, className, hoverable } = props;
   const { getPrefixCls } = useContext(ConfigContext);
   const prefixCls = getPrefixCls('card-grid');
+  // grid逻辑简单，就把grid的子组件拿出来展示就完了
   return (
     <div
       ref={ref}

@@ -22,7 +22,7 @@ const ImagePreviewToolbar = (props: ImagePreviewToolbarProps, ref) => {
     previewPrefixCls,
     simple = false,
     actions = [],
-    actionsLayout = [],
+    actionsLayout = [], // 传入一个actionsLayout然后会对defaultActions以及actions进行过滤，在actionsLayout内才展示
     defaultActions = [],
   } = props;
 
@@ -35,6 +35,7 @@ const ImagePreviewToolbar = (props: ImagePreviewToolbarProps, ref) => {
   ];
   const extraActions = actions.filter((item) => !actionsLayoutSet.has(item.key));
   // Sort by layout
+  // 按照actionsLayout传入的顺序进行排序
   const resultActions = filteredActions.sort((pre, cur) => {
     const preIndex = actionsLayout.indexOf(pre.key);
     const curIndex = actionsLayout.indexOf(cur.key);
@@ -80,6 +81,7 @@ const ImagePreviewToolbar = (props: ImagePreviewToolbarProps, ref) => {
 
   const actionList = resultActions.map((item) => {
     const action = renderAction(item, simple);
+    // 如果没有getContainer就渲染Tooltip，有的话Tooltip就失效
     if (!simple && item.name && !item.getContainer) {
       return (
         <Tooltip content={item.name} key={item.key}>
@@ -102,6 +104,7 @@ const ImagePreviewToolbar = (props: ImagePreviewToolbarProps, ref) => {
       )}
       style={props.style}
     >
+      {/* 如果是简洁模式，就变成一个more图标悬浮展示actios列 */}
       {simple && (
         <TriggerForToolbar
           prefixCls={prefixCls}

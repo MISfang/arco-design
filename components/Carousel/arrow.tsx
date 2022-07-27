@@ -18,6 +18,7 @@ function CarouselArrow(props: CarouselArrowProps, ref) {
     },
     className
   );
+  // 先判断有没有传入icon，然后再看看是不水平方向的
   const iconPrev =
     icons && icons.hasOwnProperty('prev') ? (
       icons.prev

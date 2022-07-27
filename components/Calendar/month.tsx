@@ -77,6 +77,7 @@ export function getAllDaysByTime(props: CalendarProps, time: Dayjs) {
       });
     }
   }
+  console.log('%c 🍏 rows: ', 'font-size:20px;background-color: #33A5FF;color:#fff;', rows);
   return rows;
 }
 

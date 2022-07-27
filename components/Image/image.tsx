@@ -36,14 +36,14 @@ function Image(baseProps: ImagePropsType, ref: LegacyRef<HTMLDivElement>) {
     height,
     title,
     description,
-    actions,
-    footerPosition,
-    simple,
-    loader,
-    loaderClassName,
-    error,
-    preview,
-    previewProps = {} as ImagePreviewProps,
+    actions, // 额外操作 ReactNode[]
+    footerPosition, // 底部显示的位置,是内联的还是单独在外的
+    simple, // 是否开启简洁模式，简洁模式下，actions在一个more图标上，des也不在显示
+    loader, // 加载过渡效果，为 true 显示默认加载效果 ReactNode
+    loaderClassName, // loader 的样式，将覆盖默认过渡效果
+    error, // error 状态下显示的内容	ReactNode
+    preview, // 是否开启预览
+    previewProps = {} as ImagePreviewProps, // 预览的配置项 （所有选项都是可选的）I
     alt,
     onClick,
     index,
@@ -61,12 +61,14 @@ function Image(baseProps: ImagePropsType, ref: LegacyRef<HTMLDivElement>) {
 
   const id = useMemo(() => {
     if (isNumber(index) || isNumber(_index)) {
+      // 以index为优先
       uuid = isNumber(index) ? index : _index;
       return uuid;
     }
     return uuid++;
   }, []);
 
+  // 这个hooks，判断是不是展示底部footer
   const [showFooter] = useShowFooter({ title, description, actions });
   const { isLoading, isError, isLoaded, setStatus } = useImageStatus('beforeLoad');
   const [previewVisible, setPreviewVisible] = useMergeValue(false, {
@@ -96,6 +98,7 @@ function Image(baseProps: ImagePropsType, ref: LegacyRef<HTMLDivElement>) {
     className
   );
 
+  // 拿到当前图片的ref
   const refImg = useRef<HTMLImageElement>();
 
   function onImgLoaded() {
@@ -106,6 +109,7 @@ function Image(baseProps: ImagePropsType, ref: LegacyRef<HTMLDivElement>) {
     setStatus('error');
   }
 
+  // 点击图片预览大图
   function onImgClick(e) {
     if (preview && previewGroup) {
       setCurrentIndex(id);
@@ -120,11 +124,13 @@ function Image(baseProps: ImagePropsType, ref: LegacyRef<HTMLDivElement>) {
     togglePreviewVisible(visible);
   }
 
+  // 点击切换预览图片与否
   function togglePreviewVisible(newVisible) {
     previewProps.onVisibleChange && previewProps.onVisibleChange(newVisible, previewVisible);
     setPreviewVisible(newVisible);
   }
 
+  // 监听src变化，改变image的src属性
   useEffect(() => {
     if (isServerRendering || !refImg.current) return;
     refImg.current.src = src;
@@ -162,8 +168,10 @@ function Image(baseProps: ImagePropsType, ref: LegacyRef<HTMLDivElement>) {
     </div>
   );
 
+  // 如果传入loader的话，说明是渐进式加载
   const renderLoader = () => {
     if (loader === true) return defaultLoader;
+    // loaderClassName会覆盖默认的加载loader
     if (loaderClassName) return <div className={cs(`${prefixCls}-loader`, loaderClassName)} />;
     return loader || null;
   };
@@ -182,12 +190,14 @@ function Image(baseProps: ImagePropsType, ref: LegacyRef<HTMLDivElement>) {
         onClick={onImgClick}
         alt={alt}
       />
+      {/* 如果没有isLoaded，那看看是正在加载还是加载失败了 */}
       {!isLoaded && (
         <div className={`${prefixCls}-overlay`}>
           {isError && (error || defaultError)}
           {isLoading && renderLoader()}
         </div>
       )}
+      {/* 如果加载完成并且展示底部，然后渲染ImageFooter组件 */}
       {isLoaded && showFooter && (
         <ImageFooter
           title={title}
@@ -197,6 +207,7 @@ function Image(baseProps: ImagePropsType, ref: LegacyRef<HTMLDivElement>) {
           simple={simple}
         />
       )}
+      {/* 如果加载完成并且传入preview是true，就渲染预览组件，但预览组件到底展示不展示，要看previewVisible */}
       {isLoaded && preview && (
         <ImagePreview
           visible={previewVisible}

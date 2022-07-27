@@ -11,12 +11,14 @@ function Meta(props: CardMetaProps, ref) {
 
   return (
     <div {...others} ref={ref} className={classNames}>
+      {/* title 或者 description存在 */}
       {title || description ? (
         <div className={`${prefixCls}-content`}>
           {title && <div className={`${prefixCls}-title`}>{title}</div>}
           {description && <div className={`${prefixCls}-description`}>{description}</div>}
         </div>
       ) : null}
+      {/* avatar或者actionList存在 */}
       {avatar || actionList ? (
         <div
           className={cs(`${prefixCls}-footer `, { [`${prefixCls}-footer-only-actions`]: !avatar })}

@@ -44,8 +44,10 @@ function CarouselIndicator(props: CarouselIndicatorProps, ref) {
   const wrapperProps = {
     ref,
     className: cs(prefixCls, `${prefixCls}-${type}`, `${prefixCls}-${position}`, className),
+    // 这个秒啊，用计算熟悉【】，根据传入的trigger判断是该绑定onClick还是onMouseEnter
     [trigger === 'click' ? 'onClick' : 'onMouseEnter']: (event) => {
       event.preventDefault();
+      // 当指示器类型是slider的时候走上面这段
       if (type === 'slider') {
         const x = event.nativeEvent.offsetX;
         const width = event.currentTarget.clientWidth;

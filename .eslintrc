@@ -12,7 +12,7 @@
     "airbnb",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
-    "plugin:react-hooks/recommended",
+    "plugin:react-hooks/recommended"
   ],
   "parserOptions": {
     "ecmaFeatures": {
@@ -36,22 +36,56 @@
     {
       "files": ["*.ts", "*.tsx"],
       "rules": {
-        "@typescript-eslint/no-unused-vars": [2, { "args": "none" }],
-        "@typescript-eslint/no-use-before-define": [2, { "functions": false, "classes": false }]
+        "@typescript-eslint/no-unused-vars": [
+          2,
+          {
+            "args": "none"
+          }
+        ],
+        "@typescript-eslint/no-use-before-define": [
+          2,
+          {
+            "functions": false,
+            "classes": false
+          }
+        ]
       }
     }
   ],
   "rules": {
-    "prettier/prettier": ["error", { "trailingComma": "es5", "printWidth": 100 }],
+    "prettier/prettier": [
+      "error",
+      {
+        "trailingComma": "es5",
+        "printWidth": 100
+      }
+    ],
     "linebreak-style": ["error", "unix"],
-    "no-console": ["error", { "allow": ["warn", "error"] }],
+    "no-console": [
+      "error",
+      {
+        "allow": ["warn", "error", "log"]
+      }
+    ],
     "no-case-declarations": 0,
     "no-param-reassign": 0,
     "no-underscore-dangle": 0,
     "no-useless-constructor": 0,
-    "no-unused-vars": [2, { "vars": "all", "args": "none" }],
+    "no-unused-vars": [
+      2,
+      {
+        "vars": "all",
+        "args": "none"
+      }
+    ],
     "no-restricted-syntax": 0,
-    "no-unused-expressions": ["error", { "allowShortCircuit": true, "allowTernary": true }],
+    "no-unused-expressions": [
+      "error",
+      {
+        "allowShortCircuit": true,
+        "allowTernary": true
+      }
+    ],
     "no-plusplus": 0,
     "no-return-assign": 0,
     "no-script-url": 0,
@@ -82,7 +116,12 @@
     "react/no-danger": 0,
     "react/forbid-prop-types": 0,
     "react/prop-types": 0,
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", "ts", "tsx"] }],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".js", ".jsx", "ts", "tsx"]
+      }
+    ],
     "react/sort-comp": 0,
     "react/no-did-update-set-state": 0,
     "react/prefer-stateless-function": 0,

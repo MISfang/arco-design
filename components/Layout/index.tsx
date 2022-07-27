@@ -62,3 +62,5 @@ LayoutComponent.Footer = Footer;
 LayoutComponent.Content = Content;
 
 export default LayoutComponent;
+
+// 最复杂的还是slide组件

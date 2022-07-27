@@ -8,6 +8,7 @@ import { CollapseItemProps } from './interface';
 
 function Item(props: PropsWithChildren<CollapseItemProps>, ref) {
   const { getPrefixCls } = useContext(ConfigContext);
+  // 获取传递下来的context
   const ctx = useContext(CollapseContext);
   const {
     children,
@@ -44,6 +45,7 @@ function Item(props: PropsWithChildren<CollapseItemProps>, ref) {
       )}
       style={style}
     >
+      {/* 渲染按钮区域 */}
       <div
         role="button"
         aria-disabled={disabled}

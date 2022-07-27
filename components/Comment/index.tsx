@@ -14,6 +14,7 @@ const defaultProps: CommentProps = {
   align: 'left',
 };
 
+// 纯展示类的较为简单
 function Comment(baseProps: PropsWithChildren<CommentProps>, ref) {
   const { getPrefixCls, componentConfig, rtl } = useContext(ConfigContext);
   const props = useMergeProps<PropsWithChildren<CommentProps>>(

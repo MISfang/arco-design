@@ -18,6 +18,7 @@ function ImagePreviewArrow(props: ImagePreviewArrowProps) {
 
   const prefixCls = getPrefixCls('image-preview');
   const classNames = cs(`${prefixCls}-arrow`);
+  // 如果不是无限滚动并且当前current小于等于0就让左按钮不可用
   const disableLeft = !infinite && current <= 0;
   const disableRight = !infinite && current >= previewCount - 1;
 

@@ -1,6 +1,8 @@
 // https://github.com/feross/clipboard-copy/blob/master/index.js
 
+// TODO:copy函数，可以复制
 export default async function clipboard(text) {
+  // 如果用户自己重写了navigator的copy函数，就用用户写的
   if (navigator.clipboard && navigator.clipboard.writeText) {
     try {
       await navigator.clipboard.writeText(text);
@@ -11,6 +13,7 @@ export default async function clipboard(text) {
     }
   }
 
+  // 新建一个span标签并插入document中
   const span = document.createElement('span');
   span.textContent = text;
 

@@ -29,18 +29,18 @@ const MONTHS = [
   'October',
   'November',
   'December',
-].map((month, index) => {
-  return {
-    name: month,
-    value: index,
-  };
-});
+].map((month, index) => ({
+  name: month,
+  value: index,
+}));
 
+// 大组件只有三行
 const monthGroup = Array(3);
 for (let i = 0; i < 3; i++) {
   monthGroup[i] = MONTHS.slice(i * 4, 4 * (i + 1));
 }
 
+// 小组件有四行
 const monthGroupPanel = Array(4);
 for (let i = 0; i < 4; i++) {
   monthGroupPanel[i] = MONTHS.slice(i * 3, 3 * (i + 1));

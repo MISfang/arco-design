@@ -31,20 +31,20 @@ function Calendar(baseProps: CalendarProps) {
     style,
     className,
     dayStartOfWeek,
-    panel,
-    locale,
-    panelWidth,
-    panelTodayBtn,
+    panel, //是否放在容器中展示
+    locale, //国际化配置
+    panelWidth, //卡片宽度
+    panelTodayBtn, //是否展示跳转到今天的按钮
     defaultPageShowDate,
-    value: propsValue,
+    value: propsValue, //初始值
     pageShowDate: propsPageShowDate,
     defaultValue,
-    mode: propsMode,
-    defaultMode,
+    mode: propsMode, //是月日历还是年日历
+    defaultMode, //是月日历还是年日历
     onChange,
     onPanelChange,
-    headerRender,
-    headerType,
+    headerRender, //自定义头部渲染
+    headerType, //头部渲染模式只在全屏模式下生效
     modes,
     panelOperations,
   } = props;
@@ -109,19 +109,19 @@ function Calendar(baseProps: CalendarProps) {
     }
 
     setPageShowDate(newPageShowDate);
-    onPanelChange && onPanelChange(newPageShowDate);
+    onPanelChange && onPanelChange(newPageShowDate); // 面板日期改变触发onPanelChnage的回调
   }
 
   function onChangeYear(year) {
     const newValue = methods.set(mergedPageShowDate, 'year', year);
     setPageShowDate(newValue);
-    onPanelChange && onPanelChange(newValue);
+    onPanelChange && onPanelChange(newValue); // 面板日期改变触发onPanelChnage的回调
   }
 
   function onChangeMonth(month) {
     const newValue = methods.set(mergedPageShowDate, 'month', month - 1);
     setPageShowDate(newValue);
-    onPanelChange && onPanelChange(newValue);
+    onPanelChange && onPanelChange(newValue); // 面板日期改变触发onPanelChnage的回调
   }
 
   function changeMode(mode) {
@@ -152,6 +152,7 @@ function Calendar(baseProps: CalendarProps) {
 
   return (
     <div className={classNames} style={{ ...style, ...baseStyle }}>
+      {/* 判断是headerRender是不是function，是的话执行并传入参数，不是的话判断是不是panel类型，然后渲染对应组件 */}
       {typeof headerRender === 'function' ? (
         headerRender({
           value: mergedValue,
@@ -174,6 +175,8 @@ function Calendar(baseProps: CalendarProps) {
           headerType={headerType}
         />
       )}
+      {/* 内容主体部分 */}
+      {/* 内容为月 */}
       {innerMode === 'month' && (
         <div className={`${prefixCls}-body`}>
           <Month
@@ -188,6 +191,7 @@ function Calendar(baseProps: CalendarProps) {
           />
         </div>
       )}
+      {/* 内容为年的类型 */}
       {innerMode === 'year' && (
         <div className={`${prefixCls}-body`}>
           <Year
@@ -202,6 +206,7 @@ function Calendar(baseProps: CalendarProps) {
           />
         </div>
       )}
+      {/* 卡片中最下面的今天按钮是否显示 */}
       {panelTodayBtn && panel && (
         <div className={`${prefixCls}-footer-btn-wrapper`}>{CALENDAR_LOCALE.today}</div>
       )}

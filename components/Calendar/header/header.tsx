@@ -53,6 +53,7 @@ function Header(props) {
   return (
     <div className={`${prefixCls}-header`}>
       <div className={`${prefixCls}-header-left`}>
+        {/* 判断一下是不是下拉选择型的头部，如果是的话就渲染，不是的话渲染普通型的 */}
         {isSelectHeaderType ? (
           <>
             <Select

@@ -42,6 +42,8 @@ function Button(baseProps: ButtonProps, ref) {
     rtl,
   } = useContext(ConfigContext);
   const props = useMergeProps<ButtonProps>(baseProps, defaultProps, componentConfig?.Button);
+  console.log('%c 🥪 props: ', 'font-size:20px;background-color: #EA7E5C;color:#fff;', props);
+  console.log('%c 🥜 props: ', 'font-size:20px;background-color: #465975;color:#fff;', props);
   const {
     style,
     className,
@@ -64,6 +66,11 @@ function Button(baseProps: ButtonProps, ref) {
   } = props;
 
   const iconNode = loading ? <IconLoading /> : icon;
+  console.warn(
+    '%c 🍎 iconNode: ',
+    'font-size:20px;background-color: #7F2B82;color:#fff;',
+    iconNode
+  );
 
   const [isTwoCNChar, setIsTwoCNChar] = useState(false);
   const innerButtonRef = useRef();
