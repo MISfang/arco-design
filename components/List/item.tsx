@@ -16,14 +16,21 @@ function Item(baseProps: ListItemProps, ref) {
     defaultProps,
     componentConfig && componentConfig['List.Item']
   );
+  //   actionLayout	列表操作组的位置，默认horizontal，出现在右侧；vertical出现在下方。	'horizontal' | 'vertical'	horizontal
+  // extra	列表最右侧内容，额外内容	ReactNode	-
+  // actions	列表项下方内容（列表操作组）	ReactNode[]	-
+  // className	节点类名	string | string[]	-
+  // style	节点样式	CSSProperties	-
   const { children, className, actions, extra, actionLayout, ...rest } = props;
 
   const prefixCls = getPrefixCls('list');
   const baseClassName = `${prefixCls}-item`;
+  // 这俩都是ReactElement数组，react默认你传入这样的，他会帮你把括号去掉
   const metaContent: React.ReactElement[] = [];
   const mainContent: React.ReactElement[] = [];
 
   React.Children.forEach(children, (element: React.ReactElement) => {
+    // 这里分流一下，是content还是meta
     if (element && element.type && element.type === Meta) {
       metaContent.push(element);
     } else {
@@ -53,8 +60,10 @@ function Item(baseProps: ListItemProps, ref) {
       <div className={`${baseClassName}-main`}>
         {metaContent}
         {content}
+        {/* 如果是这个vertical，就在这布局 */}
         {actionLayout === 'vertical' ? actionsContent : null}
       </div>
+      {/* 如果是这个horizontal，就在这布局 */}
       {actionLayout === 'horizontal' ? actionsContent : null}
       {extraContent}
     </div>

@@ -11,6 +11,7 @@ const defaultProps: PopoverProps = {
   unmountOnExit: true,
 };
 
+// 这个组件本质上就是对tooltips组件的运用啦
 function Popover(baseProps: PropsWithChildren<PopoverProps>, ref) {
   const { getPrefixCls, componentConfig, rtl } = useContext(ConfigContext);
   const props = useMergeProps<PropsWithChildren<PopoverProps>>(
@@ -24,7 +25,7 @@ function Popover(baseProps: PropsWithChildren<PopoverProps>, ref) {
     children,
     position,
     getPopupContainer,
-    trigger,
+    trigger, // trigger设置具体的触发方式
     defaultPopupVisible,
     popupVisible,
     triggerProps,

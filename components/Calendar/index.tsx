@@ -31,20 +31,20 @@ function Calendar(baseProps: CalendarProps) {
     style,
     className,
     dayStartOfWeek,
-    panel, //是否放在容器中展示
-    locale, //国际化配置
-    panelWidth, //卡片宽度
-    panelTodayBtn, //是否展示跳转到今天的按钮
+    panel, // 是否放在容器中展示
+    locale, // 国际化配置
+    panelWidth, // 卡片宽度
+    panelTodayBtn, // 是否展示跳转到今天的按钮
     defaultPageShowDate,
-    value: propsValue, //初始值
+    value: propsValue, // 初始值
     pageShowDate: propsPageShowDate,
     defaultValue,
-    mode: propsMode, //是月日历还是年日历
-    defaultMode, //是月日历还是年日历
+    mode: propsMode, // 是月日历还是年日历
+    defaultMode, // 是月日历还是年日历
     onChange,
     onPanelChange,
-    headerRender, //自定义头部渲染
-    headerType, //头部渲染模式只在全屏模式下生效
+    headerRender, // 自定义头部渲染
+    headerType, // 头部渲染模式只在全屏模式下生效
     modes,
     panelOperations,
   } = props;

@@ -32,6 +32,7 @@ function Countdown(props: CountdownProps, ref) {
       const _value = dayjsValue.diff(getNow(), 'millisecond');
       if (_value <= 0) {
         stopTimer();
+        // 倒计时完成触发回调函数
         onFinish && onFinish();
       }
       const valueShow = getDateString(Math.max(_value, 0), format as string);
@@ -40,6 +41,7 @@ function Countdown(props: CountdownProps, ref) {
     }, 1000 / 30);
   };
 
+  // 是否开始倒计时，父组件setStart来改变start的值，这里会调用startTimer()
   useEffect(() => {
     if (!timerRef.current && start) {
       if (dayjsValue.valueOf() >= Date.now()) {

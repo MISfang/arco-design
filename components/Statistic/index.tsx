@@ -51,6 +51,8 @@ function Statistic(baseProps: StatisticProps, ref) {
 
   const prefixCls = getPrefixCls('statistic');
 
+  // 这个函数两个参数，from确定了起始数字，to从props.value中取，确定了终止数字
+  // 触发这个方法也就触发了动画
   const countUp = (from = props.countFrom, to = props.value) => {
     const { countDuration } = props;
     if (from !== to) {
@@ -70,11 +72,13 @@ function Statistic(baseProps: StatisticProps, ref) {
           setValue(to);
         },
       });
+      // 这里动画start了
       tween.current.start();
     }
   };
 
   useEffect(() => {
+    // 如果countUp传入为true，就在该组件挂载的时候执行一下动态动画
     if (props.countUp) {
       if (tween.current) {
         tween.current.stop();
@@ -89,11 +93,13 @@ function Statistic(baseProps: StatisticProps, ref) {
     }
 
     return () => {
+      // 在这个组件要卸载的时候销毁tween，防止出现内存泄露
       tween.current && tween.current.stop();
       tween.current = null;
     };
   }, [props.value]);
 
+  // 自定义暴露给父组件的值，用ref的时候，就有点像vue中的expose那个api
   useImperativeHandle<any, StatisticHandle>(ref, () => ({
     countUp,
   }));
@@ -103,11 +109,14 @@ function Statistic(baseProps: StatisticProps, ref) {
     if (format) {
       _value = dayjs(value).format(format);
     }
+    // 这个地方确保小数点后面的精度是 precision的数值
     if (isNumber(precision) && precision >= 0) {
       _value = Number(value).toFixed(precision);
     }
+    // 以点分割，获取value的整数部分和小数部分
     let int = String(_value).split('.')[0];
     const decimal = String(_value).split('.')[1];
+    // 这里控制是否 显示千位分割符
     if (groupSeparator && isNumber(Number(value))) {
       int = Number(int).toLocaleString('en-US');
     }
