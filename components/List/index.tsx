@@ -129,7 +129,7 @@ function List<T extends unknown = any>(baseProps: ListProps<T>, ref) {
     // 传入pagination的配置，下面这俩会覆盖你传入的这俩函数
     onPageSizeChange: (size, current) => {
       setPageSize(size);
-      改变size并且如果;
+      // 改变size并且如果
       // pagination && pagination.onPageSizeChange存在的话给调用，这样就让用户传入的onPageSizeChange能生效
       typeof pagination === 'object' &&
         pagination.onPageSizeChange &&

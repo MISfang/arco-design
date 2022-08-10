@@ -15,10 +15,14 @@ import { isObject, isArray } from '../_util/is';
 import cs from '../_util/classNames';
 import Spin, { SpinProps } from '../Spin';
 import { TableProps, ColumnProps, SorterResult, GetRowKeyType } from './interface';
+// 表头
 import Thead from './thead/index';
+// 表格主体
 import Tbody from './tbody/index';
+// 表格底部
 import Tfoot from './tfoot/index';
 import Pagination from '../Pagination';
+// on添加时间监听，off移除事件监听 addEventListener removeEventListener
 import { on, off } from '../_util/dom';
 import { ConfigContext } from '../ConfigProvider';
 import { PaginationProps } from '../Pagination/pagination';
@@ -48,6 +52,7 @@ const defaultProps: TableProps = {
   rowKey: 'key',
   pagePosition: 'br',
   childrenColumnName: 'children',
+  // 如果是树形table的话，每一级向后缩进的距离
   indentSize: 15,
   showSorterTooltip: true,
 };
@@ -63,6 +68,8 @@ function Table<T extends unknown>(baseProps: TableProps<T>, ref: React.Ref<Table
   } = useContext(ConfigContext);
   const props = useMergeProps<TableProps<T>>(baseProps, defaultProps, componentConfig?.Table);
   // priority: props.pagination > ConfigProvider.tablePagination > ConfigProvider.Table.pagination
+  // 这个useMergeProps是传入越往前优先级越高
+  // 这个是分页的数据
   const mergePagination = useMergeProps<PaginationProps>(
     isObject(baseProps?.pagination) ? baseProps?.pagination : {},
     isObject(componentConfig?.Table?.pagination) ? componentConfig?.Table?.pagination : {},
@@ -72,30 +79,33 @@ function Table<T extends unknown>(baseProps: TableProps<T>, ref: React.Ref<Table
   const {
     style,
     className,
+    // 覆盖原生表格标签
     components,
     border,
     borderCell,
     columns = [],
     data = [],
     scroll,
-    noDataElement,
+    noDataElement, // 没有数据的时候显示的元素
     showHeader,
     stripe,
     hover,
     pagination,
     onChange,
-    pagePosition,
+    pagePosition, // 分页器的方位
     childrenColumnName,
     indentSize,
     rowSelection,
     tableLayoutFixed,
     footer,
+    // 虚拟列表滚动，提高表格性能
     virtualized,
-    renderPagination,
+    renderPagination, // 自定义分页渲染。
     summary,
     rowKey,
   } = props;
 
+  // 把传进来的数据深拷贝一份
   const clonedData = useMemo(
     () => deepCloneData(data, childrenColumnName),
     [data, childrenColumnName]
@@ -106,14 +116,15 @@ function Table<T extends unknown>(baseProps: TableProps<T>, ref: React.Ref<Table
   // configProvider 提供的size可能和table size 不匹配，此时默认 'default'
   const size =
     props.size || (['default', 'middle', 'small'].indexOf(ctxSize) > -1 ? ctxSize : 'default');
+  // 头部、表格主体、表格尾部、整个表格的四个ref对象
   const refTableHead = useRef<HTMLElement | null>(null);
   const refTableBody = useRef<HTMLElement | null>(null);
   const refTableFoot = useRef<HTMLDivElement | null>(null);
   const refTable = useRef<HTMLDivElement | null>(null);
   // Not fixed header
   const refTableNF = useRef<HTMLTableElement | null>(null);
-  const lastScrollLeft = useRef<number>(0);
 
+  const lastScrollLeft = useRef<number>(0);
   const scrollbarChanged = useRef<boolean>(false);
 
   const { currentFilters, currentSorter } = getDefaultFiltersAndSorter(columns);

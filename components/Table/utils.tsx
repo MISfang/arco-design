@@ -13,6 +13,7 @@ export function isChildrenNotEmpty(record, field: string) {
 }
 
 export function deepCloneData(data, childrenColumnName) {
+  console.log('%c 🍪 data: ', 'font-size:20px;background-color: #33A5FF;color:#fff;', data);
   function travel(data) {
     if (!data) {
       return [];
